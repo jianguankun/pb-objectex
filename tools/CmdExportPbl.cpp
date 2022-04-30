@@ -155,8 +155,10 @@ void CALLBACK pbcallback(PPBORCA_DIRENTRY pd,LPVOID a)
 
 int DoExport(std::string pblfile,std::string dstpath)
 {
-	std::string pblname = ::PathFindFileNameA(pblfile.c_str());
-	std::string exppath = dstpath + "\\" + pblname;
+	char szPblFile[MAX_PATH] = {0};
+	strcpy(szPblFile,::PathFindFileNameA(pblfile.c_str()));
+	*strrchr(szPblFile,'.') = '_';
+	std::string exppath = dstpath + "\\" + szPblFile;
 	printf("Export %s\n",pblfile.c_str());
 	DWORD dwAttr = ::GetFileAttributes(exppath.c_str());
 	if (dwAttr == (DWORD)-1)
@@ -366,6 +368,7 @@ int DoExport(std::string pblfile,std::string dstpath)
 
 	if (iFailCnt == 0)
 	{
+		printf("PBObject file exported to %s.\n",exppath.c_str());
 		printf("  %d Entries, All success.\n",lstPBO.size());
 	}
 	else
