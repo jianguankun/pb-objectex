@@ -28,6 +28,7 @@ struct TEntryNode
 	std::string entryname;
 	std::string file;
 	unsigned int filesize;
+	std::string comments;
 };
 
 struct TEntrySummary
@@ -50,6 +51,9 @@ bool CheckDstPblFile(TPbtInfo& _info,char* dstfile,__out int& index);
 
 //从一个目录中获取所有entry信息
 bool GetEntriesFromDirectory(__out _ENTRYLIST& entrylst, __out TEntrySummary& summary, std::string path);
+
+//从entry源文件中获取注释
+bool GetCommentFromEntrySourceFile(__out std::string& comment,const char* entryFile);
 
 void CALLBACK pbcallback(PPBORCA_COMPERR _err,LPVOID a)
 {
@@ -203,7 +207,7 @@ int CmdImportPbl(char* srcpath, char* pbtfile, char* dstfile)
 			ss << "Import " << std::setw(summary.uFileNameLen + 2) << std::setfill(' ') << _entry.file.c_str();
 			cout << ss.str();logger << ss.str();
 			ss.clear();ss.str("");
-			result = PBORCA_CompileEntryImport(hp,_pbllist[idx_dstpbl],(char*)_entry.entryname.c_str(),_entry.type,"",
+			result = PBORCA_CompileEntryImport(hp,_pbllist[idx_dstpbl],(char*)_entry.entryname.c_str(),_entry.type,(char*)_entry.comments.c_str(),
 												pReadBuf,_entry.filesize,pbcallback,(LPVOID)&sComplieOutput);
 			if (result == PBORCA_OK)
 			{
@@ -448,7 +452,10 @@ bool GetEntriesFromDirectory(__out _ENTRYLIST& entrylst, __out TEntrySummary& su
 				std::map<std::string,PBORCA_TYPE>::iterator _it = extmap.find(_ext);
 				node.type = (_it != extmap.end()) ? _it->second : (PBORCA_TYPE)-1;
 
+				GetCommentFromEntrySourceFile(node.comments,s.c_str());
+
 				entrylst.push_back(node);
+				
 			}
 		}
 		nHandle = _findnext(lf,&file);
@@ -462,4 +469,54 @@ bool GetEntriesFromDirectory(__out _ENTRYLIST& entrylst, __out TEntrySummary& su
 	}
 
 	return true;
+}
+
+//从entry源文件中获取注释
+bool GetCommentFromEntrySourceFile(__out std::string& comment,const char* entryFile)
+{
+	std::string line;
+	ifstream inFile;
+	inFile.open(entryFile);
+	if(inFile.good() != 1)
+	{
+		return false;
+	}
+
+	int lineno = 0;
+	bool bHaveLine2 = false;
+	while(getline(inFile,line,'\n'))
+	{
+		if(++lineno == 2)
+		{
+			bHaveLine2 = true;
+			break;
+		}
+	}
+
+	if (!bHaveLine2)
+	{
+		comment = " ";
+		inFile.close();
+		return false;
+	}
+
+	std::vector<std::string> vs = split_str(line,'$',2);
+	if (vs.size() != 3)
+	{
+		comment = " ";
+		inFile.close();
+		return false;
+	}
+
+	if (vs[1] != "PBExportComments")
+	{
+		comment = " ";
+		inFile.close();
+		return false;
+	}
+
+	comment = vs[2];
+
+	inFile.close();
+	return false;
 }

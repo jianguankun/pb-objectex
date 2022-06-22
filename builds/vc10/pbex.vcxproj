@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\tools\CmdCreatePbl.cpp" />
     <ClCompile Include="..\..\tools\CmdImportPbl.cpp" />
     <ClCompile Include="..\..\tools\CmdRebuildApplication.cpp" />
     <ClCompile Include="..\..\tools\main.cpp" />

@@ -1,4 +1,7 @@
->PowerBuilder工程的一般由pbl、pbt文件构成。项目中的窗体对象、函数对象、数据窗口等pb对象是存储在pbl文件中。PowerBuilder IDE 可以把pbl文件中的pb对象导出成独立的对象文件，但批量导出的功能不太友好。powerbuilder-objectex提供的工具能把pbl文件批量导出pb对象的问题。除了批量导出，还是批量导入对象到pbl文件。
+# pb-objectexd
+
+#### 介绍
+PowerBuilder工程的一般由pbl、pbt文件构成。项目中的窗体对象、函数对象、数据窗口等pb对象是存储在pbl文件中。PowerBuilder IDE 可以把pbl文件中的pb对象导出成独立的对象文件，但批量导出的功能不太友好。powerbuilder-objectex提供的工具能把pbl文件批量导出pb对象的问题。除了批量导出，还是批量导入对象到pbl文件。
 
 #### 安装使用
 bin_vc10目录中已准备好可执行程序pbex.exe，把bin_vc10目录添加到系统PATH环境变量中，则可在命令行中使用pbex。
@@ -63,6 +66,14 @@ msg.srf函数对象导入成功，但提示语法错误。具体错误信息可�
 import-logs\icclient.log文件
 
 ![](https://gitee.com/jianguankun/pb-objectex/raw/master/images/1-9.png)
+
+#### pbex createlib 创建pbl文件
+用法 : **pbex createlib \<pblfile\> [comments]**
+参数\<pblfile\>必须，将要创建的pbl文件，如果pbl文件已存在，将创建失败
+参数[comments]可选，pbl说明。
+```
+pbex createlib icclient.pbl
+```
 
 #### pbex rebuild 编译项目
 用法 : **pbex rebuild \<pbt\> [mode]**

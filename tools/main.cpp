@@ -42,6 +42,24 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 		CmdImportPbl(argv[2],argv[3],argv[4]);
 	}
+	else if (strcmp(argv[1],"createlib") == 0)
+	{
+		if (argc == 3)
+		{
+			CmdCreatePbl(argv[2]);
+			return 0;
+		}
+		else if(argc == 4)
+		{
+			CmdCreatePbl(argv[2],argv[3]);
+			return 0;
+		}
+		else
+		{
+			cout << "Number of error operators." << endl;
+			return 0;
+		}
+	}
 	else if (strcmp(argv[1],"rebuild") == 0)
 	{
 		if (argc == 3)
@@ -112,6 +130,11 @@ void ShowHelp()
 	s += "              <pbtfile> - PBT file.When compiling to PBL file, it is used to \n"; 
 	s += "                          import objects into PBL file\n"; 
 	s += "              <dst> -     target PBL file imported. \n"; 
+	s += "\n";
+	s += "  createlib   Create PB Library file(pbl).\n"; 
+	s += "              Usage: pbex createlib <pbtfile> [comment]\n"; 
+	s += "              <pbtfile> - The file name of the pbl to be created.\n"; 
+	s += "              [comment] - A comment documenting the new library. \n"; 
 	s += "\n";
 	s += "  rebuild     Compile the specified PBT file.\n"; 
 	s += "              Usage: pbex rebuild <pbtfile> [mode]\n"; 

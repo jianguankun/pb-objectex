@@ -127,3 +127,27 @@ LPTSTR* TransferPblList(TPbtInfo& _info)
 
 	return _pbllist;
 }
+
+//·Ö½â×Ö·û´®
+std::vector<std::string> split_str(const std::string& s, char delimiter, int nhead)
+{
+	std::vector<std::string> tokens;
+	std::string token;
+	std::istringstream tokenStream(s);
+	int headcount = 0;
+	while ( std::getline(tokenStream, token, delimiter) )
+	{
+		headcount++;
+		tokens.push_back(token);
+		if (nhead > 0 && headcount == nhead)
+		{
+			if(!tokenStream.eof())
+			{
+				std::getline(tokenStream, token);
+				tokens.push_back(token);
+			}
+			break;
+		}
+	}
+	return tokens;
+}

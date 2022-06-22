@@ -72,6 +72,7 @@ extern char g_szErrorMsg[PBORCA_MSGBUFFER];
 LONG __stdcall MyUnhandledExceptionFilter(PEXCEPTION_POINTERS pExceptionInfo);
 int CmdExportPbl(char* srcpath,char* dstpath);
 int CmdImportPbl(char* srcpath,char* pbtpath,char* dstpath);
+int CmdCreatePbl(char* pblfile,char* comments = NULL);
 int CmdRebuildApplication(char* pbtfile, char* buildmode);
 char *trim(char *str);
 

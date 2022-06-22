@@ -22,3 +22,6 @@ bool AnalysePbtInfo(__out TPbtInfo& _info,char* pbtfile,char* pblpath);
 
 //把vector形式的PblList转成字符串数组形式
 LPTSTR* TransferPblList(TPbtInfo& _info);
+
+//分解字符串
+std::vector<std::string> split_str(const std::string& s, char delimiter, int nhead = 0);
