@@ -201,6 +201,7 @@ int DoExport(std::string pblfile,std::string dstpath)
 		}
 		_pbo.lObjectSize = t.lObjectSize;
 		_pbo.lSourceSize = t.lSourceSize;
+//		printf("%s objectSize = %d, source = %d , binary = %d\n",_pbo.entryName.c_str(),t.lObjectSize,_pbo.lSourceSize,_pbo.lBinarySize);
 		//PBORCA_LibraryEntryInformation函数使用PBORCA_BINARY函数永远返回-3?
 // 		result = PBORCA_LibraryEntryInformation(hp,(char*)pblfile.c_str(),(char*)_pbo.entryName.c_str(),PBORCA_BINARY,&t);
 // 		if (result == PBORCA_OK)
@@ -225,6 +226,13 @@ int DoExport(std::string pblfile,std::string dstpath)
 		}
 	}
 	lMaxAlloc += 1;
+	//再让申请的内存至少为64K，为了解决对象的binary数据能正常导出，目前尚未有办法获取binary数据应该需要的内存大小
+	//如果minCacheSize不够用，参数PBORCA_BINARY的PBORCA_LibraryEntryExport函数会把expbuf写越界。可以再把minCacheSize调大些
+	long minCacheSize = 1024 * 64;
+	if(lMaxAlloc < minCacheSize)
+	{
+		lMaxAlloc = minCacheSize;
+	}
 
 	char* expbuf = (char*)::malloc(lMaxAlloc);
 	if (NULL == expbuf)
